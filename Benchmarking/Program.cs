@@ -1,14 +1,56 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.ComponentModel.Design.Serialization;
+using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
 
 namespace Benchmarking
 {
     class Program
     {
+        
         static void Main(string[] args)
         {
-            
+            int n = 0;
+            Stopwatch sw = new Stopwatch();
+            Random rand = new Random();
+
+            n = 100;
+
+            int[] arr = new int[n];
+            List<int> list = new List<int>();
+
+            sw.Start();
+            for (int i = 0; i < n; i++)
+            {
+                arr[i] = rand.Next();
+            }
+            sw.Stop();
+            double arrMs = sw.Elapsed.TotalMilliseconds;
+            sw.Restart();
+            for (int i = 0; i < n; i++)
+            {
+                list.Add(rand.Next(1,100));
+            }
+            sw.Stop();
+            double listMs = sw.Elapsed.TotalMilliseconds;
+            sw.Restart();
+            Array.Sort(arr);
+            sw.Stop();
+            double arrSortMs = sw.Elapsed.TotalMilliseconds;
+            sw.Restart();
+            list = list.OrderBy(i => i).ToList(); //Eftersom det är en fucking IEnumerable... Lazy Loading. Listan existerar inte förrän den behöver göra det...
+
+            foreach (int i in list)
+            {
+                Console.WriteLine(i);
+            }
+            Console.ReadKey();
         }
+        
         static void BubbleSort(List<int> l)
         {
 
